@@ -1,5 +1,8 @@
+# select_deck.py
+
 from aqt import mw
 from aqt.qt import QDialog, QVBoxLayout, QListWidget, QListWidgetItem, QPushButton
+from PyQt6.QtWidgets import QAbstractItemView
 
 def select_decks():
     """
@@ -11,7 +14,7 @@ def select_decks():
 
     layout = QVBoxLayout()
     deck_list = QListWidget()
-    deck_list.setSelectionMode(QListWidget.MultiSelection)
+    deck_list.setSelectionMode(QAbstractItemView.SelectionMode.MultiSelection)
 
     for name in sorted(mw.col.decks.all_names()):
         item = QListWidgetItem(name)

@@ -1,3 +1,5 @@
+# audio_generation_mode.py
+
 from aqt.qt import QInputDialog
 from aqt import mw
 

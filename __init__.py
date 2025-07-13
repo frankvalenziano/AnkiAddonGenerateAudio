@@ -1,10 +1,15 @@
+# __init__.py
+
+# This file serves as the entry point for the Anki add-on that generates audio for note fields
+# using macOS's built-in 'say' command and ffmpeg for conversion.
+
 import os
-import re
-import tempfile
 from aqt import mw
-from aqt.qt import QAction, qconnect, QInputDialog
+from aqt.qt import QAction, qconnect
 from aqt.utils import showInfo
 from anki.notes import Note
+
+# Importing helper utilities and modules
 from .voice_registry import get_installed_voices
 from .audio_utils import normalize_term, get_output_paths, synthesize_audio, convert_to_mp3
 from .locale_map import get_display_name, get_locale_map
@@ -12,9 +17,10 @@ from .audio_generation_mode import get_generation_mode
 from .select_language import select_language
 from .select_voice import select_voice_for_language
 from .note_updates import process_notes
-from .select_deck import select_decks, is_note_in_selected_decks
+from .select_deck import select_decks
 
 def generate_audio_for_note(note: Note, voice: str, replace_existing=False):
+    """Generate audio for a single Anki note's 'term' field using the specified voice."""
     term = note["term"].strip() if "term" in note else ""
     term = normalize_term(term)
 
@@ -41,6 +47,7 @@ def generate_audio_for_note(note: Note, voice: str, replace_existing=False):
     note.flush()
 
 def run_audio_generation():
+    """Initiate the audio generation process by walking the user through options."""
     selected_decks = select_decks()
     if not selected_decks:
         return
@@ -65,6 +72,7 @@ def run_audio_generation():
 
     process_notes(voice_choice, replace, generate_audio_for_note, selected_decks)
 
+# Register a menu item in Anki's Tools menu
 action = QAction("🔊 Generate Audio for Notes", mw)
 qconnect(action.triggered, run_audio_generation)
 mw.form.menuTools.addAction(action)
