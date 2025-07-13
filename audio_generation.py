@@ -1,5 +1,6 @@
 # audio_generation.py
 
+from anki.notes import Note
 from aqt.qt import QMessageBox
 from aqt import mw
 from anki.hooks import addHook
