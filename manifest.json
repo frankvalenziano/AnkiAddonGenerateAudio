@@ -4,6 +4,8 @@
   "author": "Frank Valenziano",
   "description": "Generates audio for Anki notes using macOS 'say' command and ffmpeg conversion.",
   "package": "AnkiAddonGenerateAudio",
+  "version": "1.0.1",
+  "min_point_version": 40,
   "conflicts": [],
   "support": "https://github.com/frankvalenziano/AnkiAddonGenerateAudio"
 }
