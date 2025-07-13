@@ -57,7 +57,7 @@ Your notes should have:
 - App designer: Frank Valenziano
 - Developer: ChatGPT
 - Source URL: https://github.com/frankvalenziano/AnkiAddonGenerateAudio
-
+- Anki Package: 1056834290
 ---
 
 ## 📄 License
