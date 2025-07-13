@@ -12,7 +12,7 @@ from .audio_generation_mode import get_generation_mode
 from .select_language import select_language
 from .select_voice import select_voice_for_language
 from .note_updates import process_notes
-from .select_deck import select_deck, is_note_in_selected_deck
+from .select_deck import select_decks, is_note_in_selected_decks
 
 def generate_audio_for_note(note: Note, voice: str, replace_existing=False):
     term = note["term"].strip() if "term" in note else ""
@@ -41,8 +41,8 @@ def generate_audio_for_note(note: Note, voice: str, replace_existing=False):
     note.flush()
 
 def run_audio_generation():
-    selected_deck = select_deck()
-    if not selected_deck:
+    selected_decks = select_decks()
+    if not selected_decks:
         return
 
     voices = get_installed_voices()
@@ -63,7 +63,7 @@ def run_audio_generation():
     if not voice_choice:
         return
 
-    process_notes(voice_choice, replace, generate_audio_for_note, selected_deck)
+    process_notes(voice_choice, replace, generate_audio_for_note, selected_decks)
 
 action = QAction("🔊 Generate Audio for Notes", mw)
 qconnect(action.triggered, run_audio_generation)

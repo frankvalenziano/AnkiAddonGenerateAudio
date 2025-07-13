@@ -1,31 +1,42 @@
 from aqt import mw
-from aqt.qt import QInputDialog
+from aqt.qt import QDialog, QVBoxLayout, QListWidget, QListWidgetItem, QPushButton
 
-def select_deck():
+def select_decks():
     """
-    Prompts the user to choose a single deck from all available decks in the collection.
-    Returns the selected deck name or None if canceled.
+    Opens a custom dialog allowing the user to select multiple decks.
+    Returns a list of selected deck names, or None if canceled.
     """
-    deck_names = list(mw.col.decks.all_names())
-    deck_names.sort()
+    dialog = QDialog(mw)
+    dialog.setWindowTitle("Select Decks")
 
-    deck, ok = QInputDialog.getItem(
-        mw, "Select Deck",
-        "Choose a deck to process:",
-        deck_names,
-        editable=False
-    )
-    return deck if ok else None
+    layout = QVBoxLayout()
+    deck_list = QListWidget()
+    deck_list.setSelectionMode(QListWidget.MultiSelection)
 
-def is_note_in_selected_deck(note, selected_deck_name):
+    for name in sorted(mw.col.decks.all_names()):
+        item = QListWidgetItem(name)
+        deck_list.addItem(item)
+
+    layout.addWidget(deck_list)
+
+    confirm_button = QPushButton("OK")
+    confirm_button.clicked.connect(dialog.accept)
+    layout.addWidget(confirm_button)
+
+    dialog.setLayout(layout)
+
+    if dialog.exec():
+        return [item.text() for item in deck_list.selectedItems()]
+    return None
+
+def is_note_in_selected_decks(note, selected_deck_names):
     """
-    Checks if the given note belongs to the selected deck by examining its cards.
-    Returns True if any of the note's cards belong to the selected deck.
+    Checks if the note belongs to any of the selected decks.
     """
     card_ids = note.card_ids()
     for cid in card_ids:
         card = mw.col.get_card(cid)
         deck = mw.col.decks.name(card.did)
-        if deck == selected_deck_name:
+        if deck in selected_deck_names:
             return True
     return False
