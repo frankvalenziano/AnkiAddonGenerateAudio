@@ -54,7 +54,7 @@ Your notes should have:
 
 ## 🙏 Credits
 
-- App designer: StaresAtTrees
+- App designer: Frank Valenziano
 - Developer: ChatGPT
 
 ---
