@@ -7,5 +7,5 @@
   "description": "Generates audio for Anki notes using macOS 'say' command and ffmpeg conversion.",
   "package": "AnkiAddonGenerateAudio",
   "conflicts": [],
-  "support": ""
+  "support": "https://github.com/frankvalenziano/AnkiAddonGenerateAudio"
 }
