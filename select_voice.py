@@ -1,12 +1,16 @@
 from aqt.qt import QInputDialog
 from aqt import mw
+import re
 
 def select_voice_for_language(lang_choice, voices):
     # Gather all voices for any locale that starts with the language code (e.g., 'it' matches 'it_it')
     matching_voices = []
     for locale_key, voice_list in voices.items():
         if locale_key.startswith(lang_choice):
-            matching_voices.extend(voice_list)
+            for voice in voice_list:
+                # Remove trailing ')' if present (e.g., "Grandma)")
+                cleaned = re.sub(r'\)\s*$', '', voice).strip()
+                matching_voices.append(cleaned)
 
     # Remove duplicates and sort
     matching_voices = sorted(set(matching_voices))

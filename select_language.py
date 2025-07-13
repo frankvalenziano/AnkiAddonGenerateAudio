@@ -3,14 +3,28 @@ from aqt import mw
 from .locale_map import locale_to_voice, get_display_name
 
 def select_language(voices, locale_map):
-    # locale_map is now passed as an argument
-    display_names = []
-    display_to_locale = {}
+    # Map from base language or dialect to display label and locale
+    grouped = {}
+    seen_langs = set()
+
     for locale in sorted(voices.keys()):
-        mapped_locale = locale_map.get(locale, locale)
-        label = get_display_name(mapped_locale)
-        display_names.append(label)
-        display_to_locale[label] = mapped_locale
+        mapped_locale = locale_map.get(locale, locale).lower().replace("-", "_")
+        base_lang = mapped_locale.split("_")[0]
+
+        # Include dialects for certain languages (English, Portuguese, Chinese)
+        keep_dialect = base_lang in {"en", "pt", "zh"}
+
+        if keep_dialect:
+            display_key = mapped_locale  # show en_us vs en_gb
+        else:
+            display_key = base_lang
+
+        if display_key not in grouped:
+            label = get_display_name(mapped_locale)
+            grouped[display_key] = (label, mapped_locale)
+
+    display_names = [label for label, _ in grouped.values()]
+    display_to_locale = {label: mapped for label, mapped in grouped.values()}
 
     lang_choice_label, ok = QInputDialog.getItem(
         mw, "Select Language",
