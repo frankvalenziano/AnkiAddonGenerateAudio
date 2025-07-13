@@ -4,6 +4,8 @@
 # using macOS's built-in 'say' command and ffmpeg for conversion.
 
 import os
+import html
+from bs4 import BeautifulSoup
 from aqt import mw
 from aqt.qt import QAction, qconnect
 from aqt.utils import showInfo
@@ -22,7 +24,9 @@ from .select_deck import select_decks
 def generate_audio_for_note(note: Note, voice: str, replace_existing=False):
     """Generate audio for a single Anki note's 'term' field using the specified voice."""
     term = note["term"].strip() if "term" in note else ""
-    term = normalize_term(term)
+    unescaped = html.unescape(term)
+    soup = BeautifulSoup(unescaped, "html.parser")
+    term = soup.get_text().strip()
 
     if not term:
         showInfo("⚠️ Skipped a note because the 'term' field was empty.")

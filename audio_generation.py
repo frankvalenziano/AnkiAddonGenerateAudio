@@ -3,14 +3,21 @@
 from aqt.qt import QMessageBox
 from aqt import mw
 from anki.hooks import addHook
-from aqt.utils import askUser, showInfo
+from aqt.utils import askUser, showInfo, html_to_text
 import os
 import subprocess
 import re
+from bs4 import BeautifulSoup
+import html
 
 def generate_audio_for_note(note: Note, replace_existing=False):
     import time
-    term = note["term"].strip() if "term" in note else ""
+    raw_term = note["term"] if "term" in note else ""
+    print("📦 RAW TERM:", repr(raw_term))
+    unescaped = html.unescape(raw_term)
+    soup = BeautifulSoup(unescaped, "html.parser")
+    term = soup.get_text().strip()
+    print("🧽 CLEANED TERM:", repr(term))
     term = term.replace('\u00A0', ' ').replace('\xa0', ' ').replace('&nbsp;', ' ')  # Normalize all nbsp variants
     if not term:
         showInfo("⚠️ Skipped a note because the 'term' field was empty.")

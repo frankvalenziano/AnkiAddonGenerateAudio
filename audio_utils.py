@@ -1,15 +1,18 @@
-# audio_utils.py
-
 import os
 import re
 import subprocess
+import html
+from bs4 import BeautifulSoup
 
 def normalize_term(term):
     """
     Clean and standardize the term text for consistent audio file generation.
-    Replaces non-breaking spaces and trims surrounding whitespace.
+    Strips HTML tags/entities and replaces non-breaking spaces.
     """
-    return term.replace('\u00A0', ' ').replace('\xa0', ' ').replace('&nbsp;', ' ').strip()
+    unescaped = html.unescape(term)
+    soup = BeautifulSoup(unescaped, "html.parser")
+    cleaned = soup.get_text().replace('\u00A0', ' ').replace('\xa0', ' ').replace('&nbsp;', ' ').strip()
+    return cleaned
 
 def get_output_paths(term, media_dir):
     """
