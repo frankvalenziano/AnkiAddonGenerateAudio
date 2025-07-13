@@ -3,7 +3,7 @@
 {
   "name": "Generate Audio for Notes",
   "mod": 1720896000,
-  "author": "StaresAtTrees",
+  "author": "Frank Valenziano",
   "description": "Generates audio for Anki notes using macOS 'say' command and ffmpeg conversion.",
   "package": "AnkiAddonGenerateAudio",
   "conflicts": [],
