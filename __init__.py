@@ -36,6 +36,9 @@ def generate_audio_for_note(note: Note, voice: str, replace_existing=False):
     temp_aiff_path, media_path, filename = get_output_paths(term, media_dir)
 
     if os.path.exists(media_path) and not replace_existing:
+        # File already exists; just link it in the note
+        note["Audio"] = f"[sound:{filename}]"
+        note.flush()
         return
 
     try:
